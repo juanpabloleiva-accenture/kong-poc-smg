@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prestadores-mock
+  namespace: poc-backends
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prestadores-mock
+  template:
+    metadata:
+      labels:
+        app: prestadores-mock
+    spec:
+      containers:
+        - name: prestadores-mock
+          image: mendhak/http-https-echo:31
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HTTP_PORT
+              value: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prestadores-mock
+  namespace: poc-backends
+spec:
+  selector:
+    app: prestadores-mock
+  ports:
+    - port: 80
+      targetPort: 8080
