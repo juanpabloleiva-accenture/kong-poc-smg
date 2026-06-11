@@ -9,7 +9,7 @@ metadata:
   name: mobile-mock-data
   namespace: poc-backends
 data:
-  index.json: |
+  index.html: |
     {
       "service": "mobile-login",
       "usrLoginName": "jperez",
@@ -29,7 +29,7 @@ metadata:
   name: mobile-mock
   namespace: poc-backends
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: mobile-mock
@@ -45,8 +45,8 @@ spec:
             - containerPort: 80
           volumeMounts:
             - name: data
-              mountPath: /usr/share/nginx/html/index.json
-              subPath: index.json
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
       volumes:
         - name: data
           configMap:
