@@ -9,7 +9,7 @@ metadata:
   name: mobile-mock-data
   namespace: poc-backends
 data:
-  response.json: |
+  index.json: |
     {
       "service": "mobile-login",
       "usrLoginName": "jperez",
@@ -17,19 +17,10 @@ data:
       "password": "S3cr3t!2026",
       "email": "jperez@swissmedical.com.ar",
       "emails": ["jperez@smg.com.ar", "j.perez@gmail.com"],
-      "token": "eyJhbGciOiJIUzI1Ni␣demo",
+      "token": "eyJhbGciOiJIUzI1NiDemo",
       "Authorization": "Bearer eyJ0eXAanon",
       "id": 884512,
       "numero": "20-31654987-3"
-    }
-  default.conf: |
-    server {
-      listen 8080;
-      location / {
-        default_type application/json;
-        return 200 '{"see":"file"}';
-        alias /data/response.json;
-      }
     }
 ---
 apiVersion: apps/v1
@@ -51,19 +42,13 @@ spec:
         - name: mobile-mock
           image: nginx:1.27-alpine
           ports:
-            - containerPort: 8080
+            - containerPort: 80
           volumeMounts:
             - name: data
-              mountPath: /usr/share/nginx/html/response.json
-              subPath: response.json
-            - name: conf
-              mountPath: /etc/nginx/conf.d/default.conf
-              subPath: default.conf
+              mountPath: /usr/share/nginx/html/index.json
+              subPath: index.json
       volumes:
         - name: data
-          configMap:
-            name: mobile-mock-data
-        - name: conf
           configMap:
             name: mobile-mock-data
 ---
@@ -77,4 +62,4 @@ spec:
     app: mobile-mock
   ports:
     - port: 80
-      targetPort: 8080
+      targetPort: 80
