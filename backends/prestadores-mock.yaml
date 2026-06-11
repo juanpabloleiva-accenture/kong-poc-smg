@@ -1,3 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prestadores-mock-data
+  namespace: poc-backends
+data:
+  index.json: |
+    {
+      "service": "prestadores-facturacion",
+      "cuil": "20-31654987-3",
+      "cuit": "30-71234567-9",
+      "cuitEmisor": "30-65432198-4",
+      "contra": "GF-884512",
+      "domicilios": ["Av. Corrientes 1234, CABA", "Calle Falsa 123, Rosario"],
+      "domicilioParticular": "Av. Corrientes 1234, Piso 5, CABA",
+      "domicilioFacturacion": "Av. del Libertador 5678, CABA",
+      "mes": "06",
+      "anio": "2026",
+      "codAutorizacion": "AUTH-2026-998877"
+    }
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,12 +36,17 @@ spec:
     spec:
       containers:
         - name: prestadores-mock
-          image: mendhak/http-https-echo:31
+          image: nginx:1.27-alpine
           ports:
-            - containerPort: 8080
-          env:
-            - name: HTTP_PORT
-              value: "8080"
+            - containerPort: 80
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/nginx/html/index.json
+              subPath: index.json
+      volumes:
+        - name: data
+          configMap:
+            name: prestadores-mock-data
 ---
 apiVersion: v1
 kind: Service
@@ -32,4 +58,4 @@ spec:
     app: prestadores-mock
   ports:
     - port: 80
-      targetPort: 8080
+      targetPort: 80
