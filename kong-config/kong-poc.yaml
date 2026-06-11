@@ -1,0 +1,23 @@
+_format_version: "3.0"
+services:
+  - name: mobile-svc
+    url: http://mobile-mock.poc-backends.svc.cluster.local:80
+    routes:
+      - name: mobile-route
+        paths:
+          - /mobile
+        strip_path: true
+  - name: sgi-svc
+    url: http://sgi-mock.poc-backends.svc.cluster.local:80
+    routes:
+      - name: sgi-route
+        paths:
+          - /sgi
+        strip_path: true
+  - name: prestadores-svc
+    url: http://prestadores-mock.poc-backends.svc.cluster.local:80
+    routes:
+      - name: prestadores-route
+        paths:
+          - /prestadores
+        strip_path: true
