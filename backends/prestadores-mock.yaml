@@ -4,7 +4,7 @@ metadata:
   name: prestadores-mock-data
   namespace: poc-backends
 data:
-  index.json: |
+  index.html: |
     {
       "service": "prestadores-facturacion",
       "cuil": "20-31654987-3",
@@ -41,8 +41,8 @@ spec:
             - containerPort: 80
           volumeMounts:
             - name: data
-              mountPath: /usr/share/nginx/html/index.json
-              subPath: index.json
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
       volumes:
         - name: data
           configMap:
