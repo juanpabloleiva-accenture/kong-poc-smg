@@ -16,17 +16,31 @@ services:
               scopes_required:
                 - "mobile.read"
               verify_signature: true
+          - name: post-function
+            config:
+              access:
+                - |
+                  local body = kong.request.get_raw_body()
+                  if body and #body > 0 then
+                    local fields = {
+                      "password","usrLoginName","userName","email","emails",
+                      "token","Authorization","id","numero"
+                    }
+                    local masked = body
+                    for _, f in ipairs(fields) do
+                      masked = masked:gsub('("'..f..'"%s*:%s*)"[^"]*"', '%1"[MASKED]"')
+                      masked = masked:gsub('("'..f..'"%s*:%s*)%[[^%]]*%]', '%1"[MASKED]"')
+                      masked = masked:gsub('("'..f..'"%s*:%s*)%d+', '%1"[MASKED]"')
+                    end
+                    kong.log.set_serialize_value("masked_request_body", masked)
+                  else
+                    kong.log.set_serialize_value("masked_request_body", "(sin body)")
+                  end
           - name: http-log
             config:
               http_endpoint: "http://siem-mock.poc-support.svc.cluster.local:8080/ac7b9c4b-12c2-4214-b779-d98d737ab899"
               method: POST
               content_type: "application/json"
-              custom_fields_by_lua:
-                request.headers.authorization: "return '[MASKED]'"
-                request.headers.Authorization: "return '[MASKED]'"
-                request.headers.token: "return '[MASKED]'"
-                request.querystring.token: "return '[MASKED]'"
-                request.querystring.password: "return '[MASKED]'"
   - name: sgi-svc
     url: http://sgi-mock.poc-backends.svc.cluster.local:80
     routes:
