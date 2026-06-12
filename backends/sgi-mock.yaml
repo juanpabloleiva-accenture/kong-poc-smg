@@ -1,23 +1,3 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sgi-mock-data
-  namespace: poc-backends
-data:
-  index.html: |
-    {
-      "service": "sgi-core",
-      "upb": "dXNlcjpwYXNzd29yZA==",
-      "client_secret": "cs_live_9f8e7d6c5b4a3210",
-      "base64Content": "JVBERi0xLjQKJeLjz9MKMyAwIG9iag==",
-      "signature": "MEUCIQDx9kZ2demoSignatureValue==",
-      "docu_nro": "31654987",
-      "docu_tipo": "DNI",
-      "documento": "DNI 31654987",
-      "seguridad": "CVV-3829",
-      "codigo": "SGI-00471"
-    }
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,17 +15,12 @@ spec:
     spec:
       containers:
         - name: sgi-mock
-          image: nginx:1.27-alpine
+          image: mendhak/http-https-echo:31
           ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: data
-              mountPath: /usr/share/nginx/html/index.html
-              subPath: index.html
-      volumes:
-        - name: data
-          configMap:
-            name: sgi-mock-data
+            - containerPort: 8080
+          env:
+            - name: HTTP_PORT
+              value: "8080"
 ---
 apiVersion: v1
 kind: Service
@@ -57,4 +32,4 @@ spec:
     app: sgi-mock
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8080
