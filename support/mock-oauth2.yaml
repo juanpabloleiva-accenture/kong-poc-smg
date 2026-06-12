@@ -26,7 +26,7 @@ spec:
           env:
             - name: JSON_CONFIG
               value: |
-                {"interactiveLogin":true,"httpServer":"NettyWrapper","tokenCallbacks":[{"issuerId":"smg-poc","tokenExpiry":3600,"requestMappings":[{"requestParam":"grant_type","match":"client_credentials","claims":{"sub":"app-mobile","aud":"kong-gateway","scope":"mobile.read mobile.write"}}]}]}
+                {"interactiveLogin":true,"httpServer":"NettyWrapper","tokenCallbacks":[{"issuerId":"smg-poc","tokenExpiry":3600,"requestMappings":[{"requestParam":"grant_type","match":"client_credentials","claims":{"sub":"app-mobile","aud":"kong-gateway","scope":"mobile.read mobile.write","iss":"http://mock-oauth2.poc-support.svc.cluster.local:8080/smg-poc"}}]}]}
 ---
 apiVersion: v1
 kind: Service
