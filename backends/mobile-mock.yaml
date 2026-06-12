@@ -3,26 +3,6 @@ kind: Namespace
 metadata:
   name: poc-backends
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mobile-mock-data
-  namespace: poc-backends
-data:
-  index.html: |
-    {
-      "service": "mobile-login",
-      "usrLoginName": "jperez",
-      "userName": "Juan Perez",
-      "password": "S3cr3t!2026",
-      "email": "jperez@swissmedical.com.ar",
-      "emails": ["jperez@smg.com.ar", "j.perez@gmail.com"],
-      "token": "eyJhbGciOiJIUzI1NiDemo",
-      "Authorization": "Bearer eyJ0eXAanon",
-      "id": 884512,
-      "numero": "20-31654987-3"
-    }
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -40,17 +20,12 @@ spec:
     spec:
       containers:
         - name: mobile-mock
-          image: nginx:1.27-alpine
+          image: mendhak/http-https-echo:31
           ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: data
-              mountPath: /usr/share/nginx/html/index.html
-              subPath: index.html
-      volumes:
-        - name: data
-          configMap:
-            name: mobile-mock-data
+            - containerPort: 8080
+          env:
+            - name: HTTP_PORT
+              value: "8080"
 ---
 apiVersion: v1
 kind: Service
@@ -62,4 +37,4 @@ spec:
     app: mobile-mock
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8080
