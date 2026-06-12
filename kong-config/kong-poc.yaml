@@ -7,6 +7,15 @@ services:
         paths:
           - /mobile
         strip_path: true
+        plugins:
+          - name: openid-connect
+            config:
+              issuer: "http://mock-oauth2.poc-support.svc.cluster.local:8080/smg-poc"
+              auth_methods:
+                - bearer
+              scopes_required:
+                - "mobile.read"
+              verify_signature: true
   - name: sgi-svc
     url: http://sgi-mock.poc-backends.svc.cluster.local:80
     routes:
