@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siem-mock
+  namespace: poc-support
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siem-mock
+  template:
+    metadata:
+      labels:
+        app: siem-mock
+    spec:
+      containers:
+        - name: siem-mock
+          image: ghcr.io/tarampampam/webhook-tester:2
+          args: ["serve", "--port", "8080", "--auto-create-sessions"]
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: siem-mock
+  namespace: poc-support
+spec:
+  selector:
+    app: siem-mock
+  ports:
+    - port: 8080
+      targetPort: 8080
