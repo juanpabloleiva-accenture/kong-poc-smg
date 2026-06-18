@@ -16,6 +16,11 @@ services:
               scopes_required:
                 - "mobile.read"
               verify_signature: true
+          - name: request-validator
+            config:
+              version: draft4
+              body_schema: '{"type":"object","required":["usrLoginName","password"],"properties":{"usrLoginName":{"type":"string"},"password":{"type":"string"}}}'
+              verbose_response: true
           - name: post-function
             config:
               access:
