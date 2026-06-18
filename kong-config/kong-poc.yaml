@@ -129,3 +129,10 @@ services:
               http_endpoint: "http://siem-mock.poc-support.svc.cluster.local:8080/ac7b9c4b-12c2-4214-b779-d98d737ab899"
               method: POST
               content_type: "application/json"
+plugins:
+  - name: prometheus
+    config:
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true
