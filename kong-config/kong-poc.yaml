@@ -56,6 +56,16 @@ services:
           - /sgi
         strip_path: true
         plugins:
+          - name: rate-limiting-advanced
+            config:
+              limit:
+                - 5
+              window_size:
+                - 60
+              window_type: sliding
+              identifier: ip
+              sync_rate: -1
+              namespace: smg-sgi
           - name: post-function
             config:
               access:
