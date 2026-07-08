@@ -1,7 +1,6 @@
 image:
   repository: kong/kong-gateway
   tag: "3.6"
-
 env:
   role: control_plane
   cluster_mtls: "pki"
@@ -21,53 +20,48 @@ env:
   cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
   lua_ssl_trusted_certificate: /etc/secrets/kong-cluster-ca/ca.crt
   cluster_ca_cert: /etc/secrets/kong-cluster-ca/ca.crt
-
 enterprise:
   enabled: true
   license_secret: kong-enterprise-license
-
 admin:
   enabled: true
   type: LoadBalancer
   loadBalancerSourceRanges:
-    - 186.124.2.201/32
+    - 190.137.116.134/32
   http:
     enabled: true
     servicePort: 8001
-
 manager:
   enabled: true
   type: LoadBalancer
   loadBalancerSourceRanges:
-    - 186.124.2.201/32
+    - 190.137.116.134/32
   http:
     enabled: true
     servicePort: 8002
-
 cluster:
   enabled: true
   type: LoadBalancer
+  loadBalancerSourceRanges:
+    - 190.137.116.134/32
   tls:
     enabled: true
     servicePort: 8005
-
 clustertelemetry:
   enabled: true
   type: LoadBalancer
+  loadBalancerSourceRanges:
+    - 190.137.116.134/32
   tls:
     enabled: true
     servicePort: 8006
-
 proxy:
   enabled: false
-
 ingressController:
   enabled: false
-
 migrations:
   preUpgrade: true
   postUpgrade: true
-
 secretVolumes:
   - kong-cluster-cert
   - kong-cluster-ca
